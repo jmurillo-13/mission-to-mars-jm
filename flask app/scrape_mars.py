@@ -151,7 +151,6 @@ def scrape_all():
     browser = Browser("chrome", **executable_path, headless=False)
     news_title, news_paragraph = mars_news(browser)
     img_url = featured_image(browser)
-    mars_weather = twitter_weather(browser)
     facts = mars_facts()
     hemisphere_image_urls = hemisphere(browser)
     timestamp = dt.datetime.now()
@@ -160,7 +159,6 @@ def scrape_all():
         "news_title": news_title,
         "news_paragraph": news_paragraph,
         "featured_image": img_url,
-        "weather": mars_weather,
         "facts": facts,
         "hemispheres": hemisphere_image_urls,
         "last_modified": timestamp
