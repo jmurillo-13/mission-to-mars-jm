@@ -84,7 +84,7 @@ def mars_facts():
     df.columns=["Description", "Value"]
     df.set_index("Description", inplace=True)
 
-    return df.to_html(classes="table table-dark")
+    return df.to_html(classes="table")
 
 #################################################
 # Mars Hemispheres Web Scraper
@@ -104,7 +104,7 @@ def hemisphere(browser):
         browser.find_by_css("a.product-item h3")[item].click()
         
         # Find Sample Image Anchor Tag & Extract <href>
-        sample_element = browser.find_link_by_text("Sample").first
+        sample_element = browser.links.find_by_text("Sample").first
         hemisphere["img_url"] = sample_element["href"]
         
         # Get Hemisphere Title

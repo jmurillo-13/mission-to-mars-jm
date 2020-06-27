@@ -31,7 +31,7 @@ def index():
 def scrapper():
     mars = mongo.db.mars
     mars_data = scrape_mars.scrape_all()
-    mars.update({}, mars_data, upsert=True)
+    mars.update_many({}, mars_data, upsert=True)
     print("Scraping Successful")
     return render_template("index.html", mars=mars)
    
