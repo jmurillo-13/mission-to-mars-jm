@@ -1,17 +1,17 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+#Created on Tue Jun 23 13:08:27 2020
 # Dependencies and Setup
 from bs4 import BeautifulSoup
 from splinter import Browser
 import pandas as pd
 import datetime as dt
 
-
+#################################################
 # Set Executable Path & Initialize Chrome Browser
 executable_path = {"executable_path": "/usr/local/bin/chromedriver"}
 browser = Browser("chrome", **executable_path, headless=False)
 
-
-#################################################
-# NASA Mars News
 #################################################
 # NASA Mars News Site Web Scraper
 def mars_news(browser):
@@ -30,21 +30,18 @@ def mars_news(browser):
     #   <ul class="item_list">
     #     <li class="slide">
     try:
-        element = news_soup.select_one("ul.item_list li.slide")
-        element.find("div", class_="content_title")
+        slide_element = news_soup.select_one("ul.item_list li.slide")
+        slide_element.find("div", class_="content_title")
 
         # Scrape the Latest News Title
         # Use Parent Element to Find First <a> Tag and Save it as news_title
-        news_title = element.find("div", class_="content_title").get_text()
+        news_title = slide_element.find("div", class_="content_title").get_text()
 
-        news_paragraph = element.find("div", class_="article_teaser_body").get_text()
+        news_paragraph = slide_element.find("div", class_="article_teaser_body").get_text()
     except AttributeError:
         return None, None
     return news_title, news_paragraph
 
-
-#################################################
-# JPL Mars Space Images - Featured Image
 #################################################
 # NASA JPL (Jet Propulsion Laboratory) Site Web Scraper
 def featured_image(browser):
@@ -77,8 +74,6 @@ def featured_image(browser):
 
 
 #################################################
-# Mars Facts
-#################################################
 # Mars Facts Web Scraper
 def mars_facts():
     # Visit the Mars Facts Site Using Pandas to Read
@@ -89,11 +84,8 @@ def mars_facts():
     df.columns=["Description", "Value"]
     df.set_index("Description", inplace=True)
 
-    return df.to_html(classes="table table-striped")
+    return df.to_html(classes="table table-dark")
 
-
-#################################################
-# Mars Hemispheres
 #################################################
 # Mars Hemispheres Web Scraper
 def hemisphere(browser):
@@ -125,8 +117,6 @@ def hemisphere(browser):
         browser.back()
     return hemisphere_image_urls
 
-
-
 # Helper Function
 def scrape_hemisphere(html_text):
     hemisphere_soup = BeautifulSoup(html_text, "html.parser")
@@ -145,10 +135,9 @@ def scrape_hemisphere(html_text):
 
 #################################################
 # Main Web Scraping Bot
-#################################################
 def scrape_all():
     executable_path = {"executable_path": "/usr/local/bin/chromedriver"}
-    browser = Browser("chrome", **executable_path, headless=False)
+    browser = Browser("chrome", **executable_path, headless=True)
     news_title, news_paragraph = mars_news(browser)
     img_url = featured_image(browser)
     facts = mars_facts()
